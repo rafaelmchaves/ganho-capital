@@ -6,28 +6,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaxProcessing {
-    public List<Tax> calculateTransactionTaxes(Transaction[] transactions) {
 
+    public List<Tax> calculateTransactionTaxes(Transaction[] transactions) {
+        final var taxes = new ArrayList<Tax>();
         var averagePrice = BigDecimal.ZERO;
         var stocksAmount = 0;
         var loss = BigDecimal.ZERO;
 
-        final var taxes = new ArrayList<Tax>();
-
         for (Transaction transaction :transactions) {
 
             BigDecimal operationValue = transaction.getUnitCost().multiply(new BigDecimal(transaction.getQuantity()));
-
             final var tax = new Tax();
-
             if (transaction.getOperation().equals("buy")) {
                 BigDecimal currentPosition = averagePrice.multiply(new BigDecimal(stocksAmount));
                 int totalStocks = stocksAmount + transaction.getQuantity();
 
-                averagePrice = (currentPosition.add(operationValue))
-                        .divide(new BigDecimal(totalStocks), RoundingMode.HALF_UP); //TODO check the best Rounding mode for this situation
+                averagePrice = calculateAveragePrice(operationValue, currentPosition, totalStocks);
                 tax.calculate(transaction.getOperation(), BigDecimal.ZERO, operationValue);
-
                 stocksAmount = totalStocks;
 
             } else {
@@ -43,7 +38,6 @@ public class TaxProcessing {
                         loss = BigDecimal.ZERO;
                     }
                 }
-
                 tax.calculate(transaction.getOperation(), operationValue, profit);
                 stocksAmount -= transaction.getQuantity();
             }
@@ -52,5 +46,10 @@ public class TaxProcessing {
         }
 
         return taxes;
+    }
+
+    private static BigDecimal calculateAveragePrice(BigDecimal operationValue, BigDecimal currentPosition, int totalStocks) {
+        return (currentPosition.add(operationValue))
+                .divide(new BigDecimal(totalStocks), 2, RoundingMode.HALF_UP);
     }
 }
