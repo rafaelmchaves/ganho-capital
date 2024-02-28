@@ -11,19 +11,21 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         List<String> lines = readInputLines();
 
         final var operationLines = getOperations(lines);
-        final var list = operationLines.stream().map(Main::processOperations).toList();
+        final var list = operationLines.stream().map(Main::processTransactions).toList();
+
+        ObjectMapper objectMapper = new ObjectMapper();
 
         for (List<Tax> operationTaxes: list) {
-            operationTaxes.forEach(tax -> System.out.println("tax:" + tax.getTax()));
+            System.out.println(objectMapper.writeValueAsString(operationTaxes));
         }
 
     }
 
-    private static List<Tax> processOperations(Transaction[] transactions) {
+    private static List<Tax> processTransactions(Transaction[] transactions) {
 
         var averagePrice = BigDecimal.ZERO;
         var stocksAmount = 0;
@@ -59,7 +61,6 @@ public class Main {
                         profit = profit.subtract(loss);
                         loss = BigDecimal.ZERO;
                     }
-
                 }
 
                 tax.calculate(transaction.getOperation(), operationValue, profit);
