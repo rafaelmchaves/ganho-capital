@@ -2,11 +2,13 @@ package br.com.nubank;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Operation {
+import java.math.BigDecimal;
+
+public class Transaction {
     private String operation;
 
     @JsonProperty("unit-cost")
-    private double unitCost;
+    private BigDecimal unitCost;
     private int quantity;
 
     public String getOperation() {
@@ -17,11 +19,11 @@ public class Operation {
         this.operation = operation;
     }
 
-    public double getUnitCost() {
+    public BigDecimal getUnitCost() {
         return unitCost;
     }
 
-    public void setUnitCost(double unitCost) {
+    public void setUnitCost(BigDecimal unitCost) {
         this.unitCost = unitCost;
     }
 
