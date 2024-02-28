@@ -18,11 +18,11 @@ public class BuyingTaxCalculator implements TaxCalculator {
     }
 
     private void processOperation(Transaction transaction) {
-        final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
         BigDecimal currentPosition = operationsData.getAveragePrice().multiply(new BigDecimal(operationsData.getStocksAmount()));
         int totalStocks = operationsData.getStocksAmount() + transaction.getQuantity();
-        operationsData.setAveragePrice(calculateAveragePrice(operationValue, currentPosition, totalStocks));
+        final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
 
+        operationsData.setAveragePrice(calculateAveragePrice(operationValue, currentPosition, totalStocks));
         operationsData.setStocksAmount(totalStocks);
     }
 

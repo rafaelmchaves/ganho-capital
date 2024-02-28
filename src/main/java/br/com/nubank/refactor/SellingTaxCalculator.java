@@ -16,23 +16,39 @@ public class SellingTaxCalculator implements TaxCalculator {
         BigDecimal loss = operationsData.getLoss();
         var profit = (transaction.getUnitCost().subtract(operationsData.getAveragePrice()))
                 .multiply(new BigDecimal(transaction.getQuantity()));
+
+        final var newLoss = calculateLoss(profit, loss);
+        final var newProfit = updateProfit(profit, loss);
+
+        operationsData.setLoss(newLoss);
+        operationsData.setStocksAmount( operationsData.getStocksAmount() - transaction.getQuantity());
+
+        final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
+        return calculateTax(newProfit, operationValue);
+    }
+
+    private BigDecimal calculateLoss(BigDecimal profit, BigDecimal currentLoss) {
+        BigDecimal newLoss = BigDecimal.ZERO;
+
         if (profit.compareTo(BigDecimal.ZERO) < 0) {
-            loss = loss.add(profit.abs());
+            newLoss = currentLoss.add(profit.abs());
         } else {
-            if (loss.compareTo(profit) >= 0) {
-                loss = loss.subtract(profit);
-                profit = BigDecimal.ZERO;
-            } else {
-                profit = profit.subtract(loss);
-                loss = BigDecimal.ZERO;
+            if (currentLoss.compareTo(profit) >= 0) {
+                newLoss = currentLoss.subtract(profit);
             }
         }
 
-        operationsData.setLoss(loss);
-        final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
-        operationsData.setStocksAmount( operationsData.getStocksAmount() - transaction.getQuantity());
+        return newLoss;
+    }
 
-        return calculateTax(profit, operationValue);
+    private BigDecimal updateProfit(BigDecimal profit, BigDecimal loss) {
+        if (profit.compareTo(BigDecimal.ZERO) >= 0) {
+            if (loss.compareTo(profit) < 0) {
+                return profit.subtract(loss);
+            }
+        }
+
+        return BigDecimal.ZERO;
     }
 
     private static BigDecimal calculateTax(BigDecimal profit, BigDecimal operationValue) {
