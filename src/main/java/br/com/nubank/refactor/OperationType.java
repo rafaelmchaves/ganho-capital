@@ -17,6 +17,9 @@ public enum OperationType {
 
     private static final Map<String,OperationType> map;
 
+    public String getName() {
+        return name;
+    }
     static {
         map = new HashMap<>();
         for (OperationType v : OperationType.values()) {

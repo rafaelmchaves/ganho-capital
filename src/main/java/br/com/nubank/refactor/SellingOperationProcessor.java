@@ -3,6 +3,7 @@ package br.com.nubank.refactor;
 import br.com.nubank.Transaction;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class SellingOperationProcessor implements OperationProcessor {
 
@@ -55,7 +56,7 @@ public class SellingOperationProcessor implements OperationProcessor {
         final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
         BigDecimal tax = BigDecimal.ZERO;
         if (operationValue.compareTo(SELL_TAX_FREE_PROFIT) >= 0 && this.profit.compareTo(BigDecimal.ZERO) > 0) {
-            tax = this.profit.multiply(STOCKS_SELL_PROFIT_TAX_PERCENTAGE);
+            tax = this.profit.multiply(STOCKS_SELL_PROFIT_TAX_PERCENTAGE).setScale(2, RoundingMode.HALF_UP);
         }
         return tax;
     }

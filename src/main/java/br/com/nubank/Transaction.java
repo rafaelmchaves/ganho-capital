@@ -11,6 +11,12 @@ public class Transaction {
     private BigDecimal unitCost;
     private int quantity;
 
+    public Transaction(String operation, BigDecimal unitCost, int quantity) {
+        this.operation = operation;
+        this.unitCost = unitCost;
+        this.quantity = quantity;
+    }
+
     public String getOperation() {
         return operation;
     }
