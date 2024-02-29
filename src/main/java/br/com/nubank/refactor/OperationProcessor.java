@@ -4,9 +4,11 @@ import br.com.nubank.Transaction;
 
 import java.math.BigDecimal;
 
-public interface TaxCalculator {
+public interface OperationProcessor {
 
-    BigDecimal calculate(Transaction transaction);
+    void processTransaction(Transaction transaction);
+
+    BigDecimal calculateTax(Transaction transaction);
 
     default BigDecimal calculateOperationValue(BigDecimal unitCost, int quantity) {
         return unitCost.multiply(new BigDecimal(quantity));

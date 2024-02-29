@@ -5,15 +5,15 @@ import java.util.Map;
 
 public enum OperationType {
 
-    BUY ("buy", new BuyingTaxCalculator()),
-    SELL("sell", new SellingTaxCalculator());
+    BUY ("buy", new BuyingOperationProcessor()),
+    SELL("sell", new SellingOperationProcessor());
 
-    OperationType(String name, TaxCalculator taxCalculator) {
+    OperationType(String name, OperationProcessor operationProcessor) {
         this.name = name;
-        this.taxCalculator = taxCalculator;
+        this.operationProcessor = operationProcessor;
     }
     private final String name;
-    private final TaxCalculator taxCalculator;
+    private final OperationProcessor operationProcessor;
 
     private static final Map<String,OperationType> map;
 
@@ -24,8 +24,8 @@ public enum OperationType {
         }
     }
 
-    public TaxCalculator getTransactionProcessing() {
-        return taxCalculator;
+    public OperationProcessor getTransactionProcessing() {
+        return operationProcessor;
     }
 
 

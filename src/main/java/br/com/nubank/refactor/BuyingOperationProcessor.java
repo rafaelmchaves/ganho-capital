@@ -5,19 +5,17 @@ import br.com.nubank.Transaction;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class BuyingTaxCalculator implements TaxCalculator {
+public class BuyingOperationProcessor implements OperationProcessor {
 
     private final OperationsData operationsData = OperationsData.getInstance();
 
     @Override
-    public BigDecimal calculate(Transaction transaction) {
-
-        processOperation(transaction);
-
+    public BigDecimal calculateTax(Transaction transaction) {
         return BigDecimal.ZERO;
     }
 
-    private void processOperation(Transaction transaction) {
+    @Override
+    public void processTransaction(Transaction transaction) {
         BigDecimal currentPosition = operationsData.getAveragePrice().multiply(new BigDecimal(operationsData.getStocksAmount()));
         int totalStocks = operationsData.getStocksAmount() + transaction.getQuantity();
         final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
