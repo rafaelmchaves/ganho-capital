@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class InputProcessing {
 
-    List<Transaction[]> getInputData() {
+    List<Operation[]> getInputData() {
         final List<String> lines = readInputLines();
         return getOperationsFromJson(lines);
     }
@@ -29,11 +29,11 @@ public class InputProcessing {
         return lines;
     }
 
-    private static List<Transaction[]> getOperationsFromJson(List<String> lines) {
+    private static List<Operation[]> getOperationsFromJson(List<String> lines) {
         ObjectMapper objectMapper = new ObjectMapper();
         return lines.stream().map(line -> {
             try {
-                return objectMapper.readValue(line, Transaction[].class);
+                return objectMapper.readValue(line, Operation[].class);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

@@ -1,6 +1,6 @@
 package br.com.nubank;
 
-import br.com.nubank.refactor.TransactionsProcessor;
+import br.com.nubank.refactor.OperationsProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,7 +12,7 @@ public class Main {
 
         final var lines = new InputProcessing().getInputData();
 
-        final var transactionOrchestrator = new TransactionsProcessor();
+        final var transactionOrchestrator = new OperationsProcessor();
         final var list = lines.stream().map(transactionOrchestrator::getTaxes).toList();
 
         ObjectMapper objectMapper = new ObjectMapper();

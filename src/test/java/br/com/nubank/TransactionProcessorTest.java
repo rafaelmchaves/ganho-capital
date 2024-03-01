@@ -3,7 +3,7 @@ package br.com.nubank;
 
 import br.com.nubank.refactor.OperationType;
 import br.com.nubank.refactor.OperationsData;
-import br.com.nubank.refactor.TransactionsProcessor;
+import br.com.nubank.refactor.OperationsProcessor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,12 +15,12 @@ import java.util.List;
 
 public class TransactionProcessorTest {
 
-    private TransactionsProcessor transactionsProcessor;
+    private OperationsProcessor transactionsProcessor;
     private final OperationsData operationsData = OperationsData.getInstance();
 
     @BeforeEach
     public void init() {
-        transactionsProcessor = new TransactionsProcessor();
+        transactionsProcessor = new OperationsProcessor();
         operationsData.setStocksAmount(0);
         operationsData.setAveragePrice(BigDecimal.ZERO);
         operationsData.setLoss(BigDecimal.ZERO);
@@ -32,15 +32,15 @@ public class TransactionProcessorTest {
             "then Output: [{\"tax\": 0},{\"tax\": 0},{\"tax\": 0}]")
     @Test
     public void getTaxes_SellSharesTheSamePriceWhenBought_returnTax0() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 100),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(15), 50),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(15), 50)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 100),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(15), 50),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(15), 50)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
 
     }
 
@@ -50,30 +50,30 @@ public class TransactionProcessorTest {
             "then Output: [{\"tax\": 0.00},{\"tax\": 10000.00},{\"tax\": 0.00}]")
     @Test
     public void getTaxes_sellPartOfSharesAtAProfit_returnTaxEquals10000ForTheSecondOperation() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(20), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(5), 5000)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(20), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(5), 5000)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(new BigDecimal("10000.00")), new Tax(BigDecimal.ZERO));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
     @DisplayName("Given the follow input: [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}," +
             " {\"operation\":\"sell\", \"unit-cost\":5.00, \"quantity\": 5000}, {\"operation\":\"sell\", \"unit-cost\":20.00, \"quantity\": 3000}] " +
             "then Output: [{\"tax\": 0.00},{\"tax\": 0.00},{\"tax\": 1000.00}]")
     @Test
     public void getTaxes_sellSharesAtAProfitAfterLoss_returnTaxEquals1000ForTheThirdOperation() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(5), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(20), 3000)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(5), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(20), 3000)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO), new Tax(new BigDecimal("1000.00")));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
 
     @DisplayName("Given the follow input: [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, " +
@@ -81,15 +81,15 @@ public class TransactionProcessorTest {
             "then Output: [{\"tax\": 0},{\"tax\": 0},{\"tax\": 0}]")
     @Test
     public void getTaxes_buySharesTwiceAndSellOnTheAveragePrice_returnZeroTaxes() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.BUY.getName(), BigDecimal.valueOf(25), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(15), 10000)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.BUY.getName(), BigDecimal.valueOf(25), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(15), 10000)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
 
     @DisplayName("Given the follow input: [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, " +
@@ -98,17 +98,17 @@ public class TransactionProcessorTest {
             "then Output: [{\"tax\": 0.00},{\"tax\": 0.00},{\"tax\": 0.00},{\"tax\": 10000.00}]")
     @Test
     public void getTaxes_buySharesTwiceAndSellOnTheAveragePriceAndSellAtAProfit_payTaxesInTheLastOperation() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.BUY.getName(), BigDecimal.valueOf(25), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(15), 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(25), 5000)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.BUY.getName(), BigDecimal.valueOf(25), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(15), 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(25), 5000)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO),
                 new Tax(new BigDecimal("10000.00")));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
 
     @DisplayName("Given the follow input: [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, " +
@@ -117,18 +117,18 @@ public class TransactionProcessorTest {
             "then Output: [{\"tax\": 0.00},{\"tax\": 0.00},{\"tax\": 0.00},{\"tax\": 0.00},{\"tax\": 3000.00}]")
     @Test
     public void getTaxes_sellShareAtALossAndSubsequentsProfits_payTaxesInTheLastOperation() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(2), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(25), 1000)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(2), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(25), 1000)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO),
                 new Tax(BigDecimal.ZERO), new Tax(new BigDecimal("3000.00")));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
 
     @DisplayName("Given the follow input: [{\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, {\"operation\":\"sell\", \"unit-cost\":2.00, \"quantity\": 5000}" +
@@ -140,23 +140,23 @@ public class TransactionProcessorTest {
             " {\"tax\":0.00}, {\"tax\":3700.00}, {\"tax\":0.00}]")
     @Test
     public void getTaxes_buyMoreSharesAfterSellAllShares_payTaxesTwice() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(2), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(25), 1000),
-                new Transaction(OperationType.BUY.getName(), BigDecimal.valueOf(20), 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(15), 5000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(30), 4350),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(30), 650)
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(2), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(20), 2000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(25), 1000),
+                new Operation(OperationType.BUY.getName(), BigDecimal.valueOf(20), 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(15), 5000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(30), 4350),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(30), 650)
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO),
                 new Tax(BigDecimal.ZERO), new Tax(new BigDecimal("3000.00")), new Tax(BigDecimal.ZERO), new Tax(BigDecimal.ZERO),
                 new Tax(new BigDecimal("3700.00")), new Tax(BigDecimal.ZERO));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
 
     @DisplayName("Given the follow input: {\"operation\":\"buy\", \"unit-cost\":10.00, \"quantity\": 10000}, " +
@@ -165,22 +165,22 @@ public class TransactionProcessorTest {
             "then Output: [{\"tax\":0.00},{\"tax\":80000.00},{\"tax\":0.00},{\"tax\":60000.00}]")
     @Test
     public void getTaxes_SellSharesAtABigProfit_payAHighTax() {
-        Transaction[] transactions = new Transaction[] {
-                new Transaction(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(50), 10000),
-                new Transaction(OperationType.BUY.getName(), BigDecimal.valueOf(20), 10000),
-                new Transaction(OperationType.SELL.getName(), BigDecimal.valueOf(50), 10000),
+        Operation[] operations = new Operation[] {
+                new Operation(OperationType.BUY.getName(), BigDecimal.TEN, 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(50), 10000),
+                new Operation(OperationType.BUY.getName(), BigDecimal.valueOf(20), 10000),
+                new Operation(OperationType.SELL.getName(), BigDecimal.valueOf(50), 10000),
         };
 
         List<Tax> taxes = Arrays.asList(new Tax(BigDecimal.ZERO), new Tax(new BigDecimal("80000.00")), new Tax(BigDecimal.ZERO),
                 new Tax(new BigDecimal("60000.00")));
 
-        assertTheTransactionsWithTaxes(transactions, taxes);
+        assertTheTransactionsWithTaxes(operations, taxes);
     }
 
-    private void assertTheTransactionsWithTaxes(Transaction[] transactions, List<Tax> taxes) {
+    private void assertTheTransactionsWithTaxes(Operation[] operations, List<Tax> taxes) {
 
-        var result = transactionsProcessor.getTaxes(transactions);
+        var result = transactionsProcessor.getTaxes(operations);
 
         Assertions.assertAll(() -> {
             Assertions.assertEquals(result.size(), taxes.size());

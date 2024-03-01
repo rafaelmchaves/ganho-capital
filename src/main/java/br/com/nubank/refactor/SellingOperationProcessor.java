@@ -1,6 +1,6 @@
 package br.com.nubank.refactor;
 
-import br.com.nubank.Transaction;
+import br.com.nubank.Operation;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,16 +15,16 @@ public class SellingOperationProcessor implements OperationProcessor {
     private final OperationsData operationsData = OperationsData.getInstance();
 
     @Override
-    public void processTransaction(Transaction transaction) {
+    public void processTransaction(Operation operation) {
         BigDecimal loss = operationsData.getLoss();
-        var profit = (transaction.getUnitCost().subtract(operationsData.getAveragePrice()))
-                .multiply(new BigDecimal(transaction.getQuantity()));
+        var profit = (operation.getUnitCost().subtract(operationsData.getAveragePrice()))
+                .multiply(new BigDecimal(operation.getQuantity()));
 
         final var newLoss = calculateLoss(profit, loss);
         this.profit = updateProfit(profit, loss);
 
         operationsData.setLoss(newLoss);
-        operationsData.setStocksAmount( operationsData.getStocksAmount() - transaction.getQuantity());
+        operationsData.setStocksAmount( operationsData.getStocksAmount() - operation.getQuantity());
     }
 
     private BigDecimal calculateLoss(BigDecimal profit, BigDecimal currentLoss) {
@@ -52,8 +52,8 @@ public class SellingOperationProcessor implements OperationProcessor {
     }
 
     @Override
-    public BigDecimal calculateTax(Transaction transaction) {
-        final var operationValue = calculateOperationValue(transaction.getUnitCost(), transaction.getQuantity());
+    public BigDecimal calculateTax(Operation operation) {
+        final var operationValue = calculateOperationValue(operation.getUnitCost(), operation.getQuantity());
         BigDecimal tax = BigDecimal.ZERO;
         if (operationValue.compareTo(SELL_TAX_FREE_PROFIT) >= 0 && this.profit.compareTo(BigDecimal.ZERO) > 0) {
             tax = this.profit.multiply(STOCKS_SELL_PROFIT_TAX_PERCENTAGE).setScale(2, RoundingMode.HALF_UP);
