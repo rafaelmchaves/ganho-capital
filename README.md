@@ -35,19 +35,25 @@ java -cp target/my-app-1.0-SNAPSHOT.jar br.com.nubank.Main
 
 ## Decisões arquiteturais
 
-A classe Main inicia todo o processo, quando executa a aplicação. Essa classe invoca a classe InputProcessing, 
+A classe Main inicia todo o processo, quando executa a aplicação. Essa classe invoca a classe InputProcessor, 
 que lê as linhas do stdin. E, logo depois de ter lido todos as operações de entrada, OperationsProcessor é chamado para 
 processar todas as operações, e retorna todos os impostos.
 
 Decidi criar uma classe para processar toda a entrada de dados(InputProcessing) para deixar separado onde é lido a entrada.
 Assim, se quisermos fazer mudanças futuras na entrada de dados, por exemplo, acrescentar outro tipo de entrada(além de stdin), 
-a mudança será feita apenas nessa parte, ou não interferirá na lógica central do cálculo do imposto.
+a mudança será feita apenas nessa parte, e não interferirá na lógica central do cálculo do imposto.
 
-Para calcular o imposto sobre operações, criamos duas classes: SellingOperationProcessor e BuyingOperationProcessor, para 
+Para calcular o imposto sobre operações, criei duas classes: SellingOperationProcessor e BuyingOperationProcessor, para 
 calcular imposto sobre a venda, e sobre a compra, respectivamente. Além disso, são feitos cálculos e executados regras
-sobre cada tipo de operação.
+sobre cada tipo de operação. Essas classes implementam a mesma interface "OperationsProcessor" e são criadas via strategy.
 
-Por exemplo, no caso de compra, atualizamos o preço médio. No caso de venda, calculamos o prejuízo ou lucro e o imposto
-seguindo as regras de cálculo de imposto.
+Por exemplo, no caso de compra, atualizamos o preço médio. No caso de venda, calculamos o prejuízo ou lucro. Ambas as classes,
+tem um método para calcular o imposto. Dessa forma, os cálculos de imposto de renda sobre compra e venda ficam separados.
+Apesar de que quando a operação é do tipo compra não se cobra imposto atualmente, o código já prevê que se um dia
+isso se alterar, cobrando imposto na compra, é só implementar a regra na classe BuyingOperationProcessor. A mesma coisa é para 
+a venda, caso as regras de impostos mudem, é só alterar o método calculateTax na classe SellingOperationProcessor.
+
+
+
 
 
