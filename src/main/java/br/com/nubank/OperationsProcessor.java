@@ -1,7 +1,4 @@
-package br.com.nubank.refactor;
-
-import br.com.nubank.Tax;
-import br.com.nubank.Operation;
+package br.com.nubank;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

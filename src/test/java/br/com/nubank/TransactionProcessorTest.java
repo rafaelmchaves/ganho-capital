@@ -1,9 +1,6 @@
 package br.com.nubank;
 
 
-import br.com.nubank.refactor.OperationType;
-import br.com.nubank.refactor.OperationsData;
-import br.com.nubank.refactor.OperationsProcessor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

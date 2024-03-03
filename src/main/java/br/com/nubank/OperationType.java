@@ -1,4 +1,4 @@
-package br.com.nubank.refactor;
+package br.com.nubank;
 
 import java.util.HashMap;
 import java.util.Map;
