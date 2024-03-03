@@ -10,7 +10,6 @@ import java.util.List;
 public class InputProcessor {
 
     public List<Operation[]> getInputData() throws IOException {
-        System.out.println("passou2");
         return readInputLines();
     }
 
