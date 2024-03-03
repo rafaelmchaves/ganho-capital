@@ -17,9 +17,9 @@ public class OperationsProcessor {
         cleanOperationData();
         List<Tax> taxes = new ArrayList<>();
         for (Operation operation : operations) {
-            final var transactionProcessor = OperationType.findByName(operation.getOperationType()).getTransactionProcessing();
-            transactionProcessor.process(operation);
-            taxes.add(new Tax(transactionProcessor.calculateTax(operation)));
+            final var operationProcessor = OperationType.findByName(operation.getOperationType()).getTransactionProcessing();
+            operationProcessor.process(operation);
+            taxes.add(new Tax(operationProcessor.calculateTax(operation)));
         }
 
         return taxes;

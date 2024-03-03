@@ -53,7 +53,7 @@ Apesar de que quando a operação é do tipo compra não se cobra imposto atualm
 isso se alterar, cobrando imposto na compra, é só implementar a regra na classe BuyingOperationProcessor. A mesma coisa é para 
 a venda, caso as regras de impostos mudem, é só alterar o método calculateTax na classe SellingOperationProcessor.
 
-
+Foi criado a classe Tax como o modelo de retorno de output.
 
 
 

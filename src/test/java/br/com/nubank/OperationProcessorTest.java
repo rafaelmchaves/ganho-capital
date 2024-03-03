@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-public class TransactionProcessorTest {
+public class OperationProcessorTest {
 
     private OperationsProcessor transactionsProcessor;
     private final OperationsData operationsData = OperationsData.getInstance();
