@@ -1,5 +1,6 @@
 package br.com.nubank;
 
+import br.com.nubank.model.Operation;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

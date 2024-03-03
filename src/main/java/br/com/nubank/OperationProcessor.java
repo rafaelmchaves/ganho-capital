@@ -1,6 +1,6 @@
 package br.com.nubank;
 
-import br.com.nubank.Operation;
+import br.com.nubank.model.Operation;
 
 import java.math.BigDecimal;
 

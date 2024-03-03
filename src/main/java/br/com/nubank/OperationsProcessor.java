@@ -1,5 +1,8 @@
 package br.com.nubank;
 
+import br.com.nubank.model.Operation;
+import br.com.nubank.model.Tax;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
