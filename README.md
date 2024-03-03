@@ -65,5 +65,4 @@ a venda, caso as regras de impostos mudem, é só alterar o código dentro do m�
 
 Foi criado a classe Tax como o modelo de retorno de output.
 
-
-
+Foi criado testes automatizados para a regra de negócio do cálculo de imposto para cada lista de operações.
