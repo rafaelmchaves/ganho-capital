@@ -15,7 +15,7 @@ public class BuyingOperationProcessor implements OperationProcessor {
     }
 
     @Override
-    public void processTransaction(Operation operation) {
+    public void process(Operation operation) {
         BigDecimal currentPosition = operationsData.getAveragePrice().multiply(new BigDecimal(operationsData.getStocksAmount()));
         int totalStocks = operationsData.getStocksAmount() + operation.getQuantity();
         final var operationValue = calculateOperationValue(operation.getUnitCost(), operation.getQuantity());

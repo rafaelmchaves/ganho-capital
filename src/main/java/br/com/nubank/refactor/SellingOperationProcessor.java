@@ -15,7 +15,7 @@ public class SellingOperationProcessor implements OperationProcessor {
     private final OperationsData operationsData = OperationsData.getInstance();
 
     @Override
-    public void processTransaction(Operation operation) {
+    public void process(Operation operation) {
         BigDecimal loss = operationsData.getLoss();
         var profit = (operation.getUnitCost().subtract(operationsData.getAveragePrice()))
                 .multiply(new BigDecimal(operation.getQuantity()));
@@ -32,20 +32,16 @@ public class SellingOperationProcessor implements OperationProcessor {
 
         if (profit.compareTo(BigDecimal.ZERO) < 0) {
             newLoss = currentLoss.add(profit.abs());
-        } else {
-            if (currentLoss.compareTo(profit) >= 0) {
-                newLoss = currentLoss.subtract(profit);
-            }
+        } else if (currentLoss.compareTo(profit) >= 0) {
+            newLoss = currentLoss.subtract(profit);
         }
 
         return newLoss;
     }
 
     private BigDecimal updateProfit(BigDecimal profit, BigDecimal loss) {
-        if (profit.compareTo(BigDecimal.ZERO) >= 0) {
-            if (loss.compareTo(profit) < 0) {
-                return profit.subtract(loss);
-            }
+        if (profit.compareTo(BigDecimal.ZERO) >= 0 && loss.compareTo(profit) < 0) {
+            return profit.subtract(loss);
         }
 
         return BigDecimal.ZERO;

@@ -10,10 +10,10 @@ public class Main {
 
     public static void main(String[] args) throws JsonProcessingException {
 
-        final var lines = new InputProcessing().getInputData();
+        final var lines = new InputProcessor().getInputData();
 
-        final var transactionOrchestrator = new OperationsProcessor();
-        final var list = lines.stream().map(transactionOrchestrator::getTaxes).toList();
+        final var operationsProcessor = new OperationsProcessor();
+        final var list = lines.stream().map(operationsProcessor::getTaxes).toList();
 
         ObjectMapper objectMapper = new ObjectMapper();
         for (List<Tax> operationTaxes: list) {

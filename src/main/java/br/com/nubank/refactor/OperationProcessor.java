@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public interface OperationProcessor {
 
-    void processTransaction(Operation operation);
+    void process(Operation operation);
 
     BigDecimal calculateTax(Operation operation);
 

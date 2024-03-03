@@ -13,10 +13,13 @@ public class Operation {
     private BigDecimal unitCost;
     private int quantity;
 
-    public Operation(String operation, BigDecimal unitCost, int quantity) {
-        this.operationType = operation;
+    public Operation(String operationType, BigDecimal unitCost, int quantity) {
+        this.operationType = operationType;
         this.unitCost = unitCost;
         this.quantity = quantity;
+    }
+
+    public Operation() {
     }
 
     public String getOperationType() {

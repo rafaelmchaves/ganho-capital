@@ -13,7 +13,7 @@ public class OperationsProcessor {
         List<Tax> taxes = new ArrayList<>();
         for (Operation operation : operations) {
             final var transactionProcessor = OperationType.findByName(operation.getOperationType()).getTransactionProcessing();
-            transactionProcessor.processTransaction(operation);
+            transactionProcessor.process(operation);
             taxes.add(new Tax(transactionProcessor.calculateTax(operation)));
         }
 
