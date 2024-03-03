@@ -28,6 +28,16 @@ public class SellingOperationProcessor implements OperationProcessor {
         operationsData.setStocksAmount( operationsData.getStocksAmount() - operation.getQuantity());
     }
 
+    @Override
+    public BigDecimal calculateTax(Operation operation) {
+        final var operationValue = calculateOperationValue(operation.getUnitCost(), operation.getQuantity());
+        BigDecimal tax = BigDecimal.ZERO;
+        if (operationValue.compareTo(SELL_TAX_FREE_PROFIT) >= 0 && this.profit.compareTo(BigDecimal.ZERO) > 0) {
+            tax = this.profit.multiply(STOCKS_SELL_PROFIT_TAX_PERCENTAGE).setScale(2, RoundingMode.HALF_UP);
+        }
+        return tax;
+    }
+
     private BigDecimal calculateLoss(BigDecimal profit, BigDecimal currentLoss) {
         BigDecimal newLoss = BigDecimal.ZERO;
 
@@ -47,16 +57,5 @@ public class SellingOperationProcessor implements OperationProcessor {
 
         return BigDecimal.ZERO;
     }
-
-    @Override
-    public BigDecimal calculateTax(Operation operation) {
-        final var operationValue = calculateOperationValue(operation.getUnitCost(), operation.getQuantity());
-        BigDecimal tax = BigDecimal.ZERO;
-        if (operationValue.compareTo(SELL_TAX_FREE_PROFIT) >= 0 && this.profit.compareTo(BigDecimal.ZERO) > 0) {
-            tax = this.profit.multiply(STOCKS_SELL_PROFIT_TAX_PERCENTAGE).setScale(2, RoundingMode.HALF_UP);
-        }
-        return tax;
-    }
-
 
 }

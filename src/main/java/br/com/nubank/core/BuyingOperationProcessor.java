@@ -11,11 +11,6 @@ public class BuyingOperationProcessor implements OperationProcessor {
     private final OperationsData operationsData = OperationsData.getInstance();
 
     @Override
-    public BigDecimal calculateTax(Operation operation) {
-        return BigDecimal.ZERO;
-    }
-
-    @Override
     public void process(Operation operation) {
         BigDecimal currentPosition = operationsData.getAveragePrice().multiply(new BigDecimal(operationsData.getStocksAmount()));
         int totalStocks = operationsData.getStocksAmount() + operation.getQuantity();
@@ -23,6 +18,11 @@ public class BuyingOperationProcessor implements OperationProcessor {
 
         operationsData.setAveragePrice(calculateAveragePrice(operationValue, currentPosition, totalStocks));
         operationsData.setStocksAmount(totalStocks);
+    }
+
+    @Override
+    public BigDecimal calculateTax(Operation operation) {
+        return BigDecimal.ZERO;
     }
 
     private static BigDecimal calculateAveragePrice(BigDecimal operationValue, BigDecimal currentPosition, int totalStocks) {
