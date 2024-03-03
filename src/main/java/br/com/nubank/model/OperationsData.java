@@ -1,4 +1,4 @@
-package br.com.nubank;
+package br.com.nubank.model;
 
 import java.math.BigDecimal;
 

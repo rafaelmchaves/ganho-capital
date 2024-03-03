@@ -1,6 +1,8 @@
-package br.com.nubank;
+package br.com.nubank.core;
 
 import br.com.nubank.model.Operation;
+import br.com.nubank.model.OperationType;
+import br.com.nubank.model.OperationsData;
 import br.com.nubank.model.Tax;
 
 import java.math.BigDecimal;

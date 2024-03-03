@@ -1,6 +1,7 @@
-package br.com.nubank;
+package br.com.nubank.core;
 
 import br.com.nubank.model.Operation;
+import br.com.nubank.model.OperationsData;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

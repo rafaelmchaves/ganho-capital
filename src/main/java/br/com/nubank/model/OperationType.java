@@ -1,4 +1,8 @@
-package br.com.nubank;
+package br.com.nubank.model;
+
+import br.com.nubank.core.BuyingOperationProcessor;
+import br.com.nubank.core.OperationProcessor;
+import br.com.nubank.core.SellingOperationProcessor;
 
 import java.util.HashMap;
 import java.util.Map;

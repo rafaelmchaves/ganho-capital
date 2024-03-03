@@ -1,5 +1,7 @@
 package br.com.nubank;
 
+import br.com.nubank.core.OperationsProcessor;
+import br.com.nubank.input.InputProcessor;
 import br.com.nubank.model.Tax;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

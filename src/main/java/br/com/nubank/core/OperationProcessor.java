@@ -1,4 +1,4 @@
-package br.com.nubank;
+package br.com.nubank.core;
 
 import br.com.nubank.model.Operation;
 

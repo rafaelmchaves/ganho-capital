@@ -1,4 +1,4 @@
-package br.com.nubank;
+package br.com.nubank.input;
 
 import br.com.nubank.model.Operation;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class InputProcessor {
 
-    List<Operation[]> getInputData() {
+    public List<Operation[]> getInputData() {
         final List<String> lines = readInputLines();
         return getOperationsFromJson(lines);
     }

@@ -1,7 +1,10 @@
 package br.com.nubank;
 
 
+import br.com.nubank.model.OperationsData;
+import br.com.nubank.core.OperationsProcessor;
 import br.com.nubank.model.Operation;
+import br.com.nubank.model.OperationType;
 import br.com.nubank.model.Tax;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
