@@ -22,15 +22,25 @@ Exemplo de json de entrada:
 
 ## Como executar
 
-Pode executar via IDE ou linha de comando. 
-Por linha de comando, faça o seguinte:
+É necessário ter o java 17 e o maven instalado no computador.
 
-Dentro da pasta do projeto, na raiz onde fica o arquivo pom.xml:
+Onde está o arquivo pom.xml, rodar o seguinte comando:
 
 ```
-mvn package
+mvn clean install
+```
 
-java -cp target/my-app-1.0-SNAPSHOT.jar br.com.nubank.Main
+Dentro da pasta do projeto, na raiz tem um arquivo chamado ganho-capital.sh. Execute o 
+arquivo dessa forma:
+
+```
+./ganho-capital < caminho_do_arquivo
+```
+
+Por exemplo, se o arquivo chama input.txt está na raiz):
+
+```
+./ganho-capital < input.txt
 ```
 
 ## Decisões arquiteturais
@@ -44,14 +54,14 @@ Assim, se quisermos fazer mudanças futuras na entrada de dados, por exemplo, ac
 a mudança será feita apenas nessa parte, e não interferirá na lógica central do cálculo do imposto.
 
 Para calcular o imposto sobre operações, criei duas classes: SellingOperationProcessor e BuyingOperationProcessor, para 
-calcular imposto sobre a venda, e sobre a compra, respectivamente. Além disso, são feitos cálculos e executados regras
+calcular o imposto sobre a venda, e sobre a compra, respectivamente. Além disso, são feito cálculos e executados regras
 sobre cada tipo de operação. Essas classes implementam a mesma interface "OperationsProcessor" e são criadas via strategy.
 
 Por exemplo, no caso de compra, atualizamos o preço médio. No caso de venda, calculamos o prejuízo ou lucro. Ambas as classes,
 tem um método para calcular o imposto. Dessa forma, os cálculos de imposto de renda sobre compra e venda ficam separados.
 Apesar de que quando a operação é do tipo compra não se cobra imposto atualmente, o código já prevê que se um dia
 isso se alterar, cobrando imposto na compra, é só implementar a regra na classe BuyingOperationProcessor. A mesma coisa é para 
-a venda, caso as regras de impostos mudem, é só alterar o método calculateTax na classe SellingOperationProcessor.
+a venda, caso as regras de impostos mudem, é só alterar o código dentro do método calculateTax na classe SellingOperationProcessor.
 
 Foi criado a classe Tax como o modelo de retorno de output.
 
