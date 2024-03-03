@@ -24,13 +24,13 @@ Exemplo de json de entrada:
 
 É necessário ter o java 17 e o maven instalado no computador.
 
-Onde está o arquivo pom.xml, rodar o seguinte comando:
+Na raiz do projeto, onde está o arquivo pom.xml, rodar o seguinte comando:
 
 ```
 mvn clean install
 ```
 
-Dentro da pasta do projeto, na raiz tem um arquivo chamado ganho-capital.sh. Execute o 
+Ainda na raiz do projeto tem um arquivo chamado ganho-capital. Execute o 
 arquivo dessa forma:
 
 ```
@@ -43,7 +43,7 @@ Por exemplo, se o arquivo chama input.txt está na raiz):
 ./ganho-capital < input.txt
 ```
 
-## Decisões arquiteturais
+## Decisões técnicas e arquiteturais
 
 A classe Main inicia todo o processo, quando executa a aplicação. Essa classe invoca a classe InputProcessor, 
 que lê as linhas do stdin. E, logo depois de ter lido todos as operações de entrada, OperationsProcessor é chamado para 
@@ -66,3 +66,11 @@ a venda, caso as regras de impostos mudem, é só alterar o código dentro do m�
 Foi criado a classe Tax como o modelo de retorno de output.
 
 Foi criado testes automatizados para a regra de negócio do cálculo de imposto para cada lista de operações.
+
+Usei a biblioteca ```com.fasterxml.jackson.core``` para poder ler a string e transformá-la em Json de forma simplificada e vice-versa, usando 
+o objectMapper.
+Usei a biblioteca ```junit-jupiter-engine``` para implementar os teste unitários usando o JUnit 5, assim, fica super
+simples de qualquer mudança no código ou refactory, retesta a lógica facilmente.
+
+
+
