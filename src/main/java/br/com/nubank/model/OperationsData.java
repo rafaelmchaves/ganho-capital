@@ -48,4 +48,10 @@ public class OperationsData {
         this.loss = loss;
     }
 
+    public void clean() {
+        operationsData.setLoss(BigDecimal.ZERO);
+        operationsData.setAveragePrice(BigDecimal.ZERO);
+        operationsData.setStocksAmount(0);
+    }
+
 }
