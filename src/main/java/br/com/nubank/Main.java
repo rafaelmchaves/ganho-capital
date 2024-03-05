@@ -3,14 +3,14 @@ package br.com.nubank;
 import br.com.nubank.core.OperationsProcessor;
 import br.com.nubank.input.InputProcessor;
 import br.com.nubank.model.Tax;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) throws IOException {
 
         final var lines = new InputProcessor().getInputData();
 
@@ -23,7 +23,5 @@ public class Main {
         }
 
     }
-
-
 
 }

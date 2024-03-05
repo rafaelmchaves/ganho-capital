@@ -1,43 +1,27 @@
 package br.com.nubank.input;
 
 import br.com.nubank.model.Operation;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class InputProcessor {
 
-    public List<Operation[]> getInputData() {
-        final List<String> lines = readInputLines();
-        return getOperationsFromJson(lines);
+    public List<Operation[]> getInputData() throws IOException {
+        return readInputLines();
     }
 
-    private static List<String> readInputLines() {
-        final Scanner scanner = new Scanner(System.in);
-        List<String> lines = new ArrayList<>();
-        while (scanner.hasNextLine()) {
-            final var text = scanner.nextLine();
-            if (text.isEmpty()) {
-                break;
-            }
-            lines.add(text);
+    private static List<Operation[]> readInputLines() throws IOException {
+        List<Operation[]> operations = new ArrayList<>();
+        var jsonInput = new String(System.in.readAllBytes());
+
+        String[] lines = jsonInput.split("\n");
+        for (String line :lines) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            operations.add(objectMapper.readValue(line, Operation[].class));
         }
-
-        scanner.close();
-        return lines;
-    }
-
-    private static List<Operation[]> getOperationsFromJson(List<String> lines) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return lines.stream().map(line -> {
-            try {
-                return objectMapper.readValue(line, Operation[].class);
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        }).toList();
+        return operations;
     }
 }

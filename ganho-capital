@@ -1,2 +1,4 @@
-#! bash
-java jar lakjsld -t ?1
+#!/bin/sh
+
+clear
+java -cp target/GanhoCapital-1.0-SNAPSHOT-jar-with-dependencies.jar br.com.nubank.Main
