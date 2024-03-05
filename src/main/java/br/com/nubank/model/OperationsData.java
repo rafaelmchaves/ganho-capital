@@ -1,4 +1,4 @@
-package br.com.nubank.refactor;
+package br.com.nubank.model;
 
 import java.math.BigDecimal;
 
@@ -46,6 +46,12 @@ public class OperationsData {
 
     public void setLoss(BigDecimal loss) {
         this.loss = loss;
+    }
+
+    public void clean() {
+        operationsData.setLoss(BigDecimal.ZERO);
+        operationsData.setAveragePrice(BigDecimal.ZERO);
+        operationsData.setStocksAmount(0);
     }
 
 }
